@@ -1,0 +1,22 @@
+{
+  "name": "mse-player",
+  "version": "1.0.0",
+  "description": "基于MSE实现的视频播放器研究",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhw2590582/mse-player.git"
+  },
+  "keywords": ["MSE", "player"],
+  "authors": [
+    "Harvey Zack <laozhaochaguan@gmail.com>"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zhw2590582/mse-player/issues"
+  },
+  "homepage": "https://github.com/zhw2590582/mse-player#readme"
+}
