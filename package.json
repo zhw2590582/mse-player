@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "description": "基于MSE实现的视频播放器研究",
   "main": "dist/msePlayer.js",
-  "umd:main": "dist/msePlayer.js",
+  "umd:main": "dist/msePlayer.umd.js",
+  "module": "dist/msePlayer.m.js",
   "source": "src/index.js",
   "scripts": {
-    "build": "rimraf ./dist && microbundle --f umd --sourcemap false",
+    "build": "rimraf ./dist && microbundle --sourcemap false",
     "dev": "microbundle watch --format umd",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "test": "jest"

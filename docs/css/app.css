@@ -1,0 +1,11 @@
+.video-container {
+    margin: 100px 0 0;
+    text-align: center;
+}
+
+.video-container .video{
+    width: 400px;
+    height: 300px;
+    background: #000;
+    vertical-align: top;
+}
