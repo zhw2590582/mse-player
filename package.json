@@ -3,12 +3,11 @@
   "version": "1.0.0",
   "description": "基于MSE实现的视频播放器研究",
   "main": "dist/msePlayer.js",
-  "umd:main": "dist/msePlayer.umd.js",
-  "module": "dist/msePlayer.m.js",
-  "source": "src/index.js", 
+  "umd:main": "dist/msePlayer.js",
+  "source": "src/index.js",
   "scripts": {
-    "build": "microbundle --sourcemap false",
-    "dev": "microbundle watch",
+    "build": "rimraf ./dist && microbundle --format umd --sourcemap false",
+    "dev": "microbundle watch --format umd",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "test": "jest"
   },
@@ -33,6 +32,11 @@
     "babel-jest": "^22.4.3",
     "babel-preset-env": "^1.6.1",
     "coveralls": "^3.0.0",
-    "microbundle": "^0.4.4"
+    "microbundle": "^0.4.4",
+    "rimraf": "^2.6.2"
+  },
+  "dependencies": {
+    "tiny-emitter": "^2.0.2",
+    "whatwg-fetch": "^2.0.4"
   }
 }
