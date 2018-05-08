@@ -2,13 +2,9 @@
   "name": "mse-player",
   "version": "1.0.0",
   "description": "基于MSE实现的视频播放器研究",
-  "main": "dist/msePlayer.js",
-  "umd:main": "dist/msePlayer.umd.js",
-  "module": "dist/msePlayer.m.js",
-  "source": "src/index.ts",
   "scripts": {
-    "build": "rimraf ./dist && microbundle --sourcemap false",
-    "dev": "microbundle watch",
+    "build": "poi build",
+    "dev": "poi",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "test": "jest"
   },
@@ -29,16 +25,16 @@
   },
   "homepage": "https://github.com/zhw2590582/mse-player#readme",
   "devDependencies": {
-    "babel-core": "^6.26.0",
+    "@poi/plugin-typescript": "^10.1.2",
     "babel-jest": "^22.4.3",
-    "babel-preset-env": "^1.6.1",
-    "coveralls": "^3.0.0",
-    "microbundle": "^0.4.4",
-    "rimraf": "^2.6.2"
+    "coveralls": "^3.0.1",
+    "jest": "^22.4.3",
+    "poi": "^10.1.6",
+    "ts-node": "^6.0.3",
+    "typescript": "^2.8.3"
   },
   "dependencies": {
     "mitt": "^1.1.3",
-    "tiny-emitter": "^2.0.2",
     "whatwg-fetch": "^2.0.4"
   }
 }
