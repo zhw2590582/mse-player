@@ -60,3 +60,4 @@ typings/
 .idea
 dist/
 proxy.js
+.rpt2_cache

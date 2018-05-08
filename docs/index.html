@@ -15,18 +15,20 @@
 
 <body>
     <div class="video-container">
-        <video class="video" controls></video>
+        <video id="video" controls></video>
     </div>
     <script src="/dist/msePlayer.umd.js"></script>
     <script src="js/app.js"></script>
     <script>
         var player = new MsePlayer({
-            target: ".video",
+            target: "#video",
             type: "mp4",
             url: 'https://zhw2590582.github.io/mse-player/video/frag_bunny.mp4'
         });
 
-
+        player.on('play', e => {
+			console.log('play: ' + e);
+		});
     </script>
 </body>
 

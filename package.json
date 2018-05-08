@@ -5,10 +5,10 @@
   "main": "dist/msePlayer.js",
   "umd:main": "dist/msePlayer.umd.js",
   "module": "dist/msePlayer.m.js",
-  "source": "src/index.js",
+  "source": "src/index.ts",
   "scripts": {
     "build": "rimraf ./dist && microbundle --sourcemap false",
-    "dev": "microbundle watch --format umd",
+    "dev": "microbundle watch",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "test": "jest"
   },
@@ -37,6 +37,7 @@
     "rimraf": "^2.6.2"
   },
   "dependencies": {
+    "mitt": "^1.1.3",
     "tiny-emitter": "^2.0.2",
     "whatwg-fetch": "^2.0.4"
   }
