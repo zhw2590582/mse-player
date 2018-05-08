@@ -1,4 +1,5 @@
 import mitt from 'mitt';
+import MSE from './mse';
 import MediaElement, { propertys, methods, events } from './mediaElement';
 
 interface Options {
@@ -11,6 +12,7 @@ class MsePlayer {
 	private options: Options;
 	private videoElement: HTMLVideoElement;
 	private mediaElement: any;
+	private mse: any;
 	private emitter: any;
 
 	constructor(options: Options) {
@@ -33,6 +35,7 @@ class MsePlayer {
 	}
 
 	private _init() {
+		this.mse = new MSE(this);
 		this.mediaElement = new MediaElement(this);
 		// console.log(this);
 	}
