@@ -1,11 +1,11 @@
 {
-	"compilerOptions": {
-		"sourceMap": true,
-		"strict": true,
-		"module": "es2015",
-		"target": "es5",
-		"experimentalDecorators": true,
-		"moduleResolution": "node"
-	},
-	"include": ["src"]
+  "compilerOptions": {
+    "target": "es6",
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "removeComments": true
+  },
+  "awesomeTypescriptLoaderOptions": {
+    /* ... */
+  }
 }

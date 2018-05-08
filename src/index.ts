@@ -21,8 +21,10 @@ class MsePlayer {
 			...options
 		};
 
-    this.videoElement = document.querySelector(this.options.target);
-    this.emitter = mitt();
+		this.videoElement = <HTMLVideoElement>document.querySelector(this.options.target);
+
+		// @ts-ignore
+		this.emitter = mitt();
 		this._init();
 	}
 
