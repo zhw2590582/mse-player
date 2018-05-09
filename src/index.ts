@@ -49,7 +49,7 @@ class MsePlayer {
         if (!options.type) {
             let urlArr = options.url.trim().toLocaleLowerCase().split('.');
             let type = urlArr[urlArr.length - 1];
-            if (!type) {
+            if (!type || !Object.keys(mimeCodeces).includes(type)) {
                 throw new MseError(`Can't find video's type from ${options.url}`);
             } else {
                 options.type = type;
