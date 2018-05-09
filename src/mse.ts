@@ -1,26 +1,26 @@
 import MseError from './mseError';
 
 interface MediaSourceType {
-	propertys?: string[];
-	methods?: string[];
-	events?: string[];
+    propertys?: string[];
+    methods?: string[];
+    events?: string[];
 }
 
 export const msInstanceType: MediaSourceType = {
-	propertys: [
+    propertys: [
         'activeSourceBuffers',
         'duration',
         'readyState',
         'sourceBuffers'
     ],
-	methods: [
-		'addSourceBuffer',
-		'endOfStream',
-		'removeSourceBuffer',
-		'clearLiveSeekableRange',
-		'setLiveSeekableRange'
-	],
-	events: [
+    methods: [
+        'addSourceBuffer',
+        'endOfStream',
+        'removeSourceBuffer',
+        'clearLiveSeekableRange',
+        'setLiveSeekableRange'
+    ],
+    events: [
         'sourceclose',
         'sourceended',
         'sourceopen'
@@ -28,7 +28,7 @@ export const msInstanceType: MediaSourceType = {
 };
 
 export const sourceBufferType: MediaSourceType = {
-	propertys: [
+    propertys: [
         'mode',
         'updating',
         'buffered',
@@ -40,13 +40,13 @@ export const sourceBufferType: MediaSourceType = {
         'appendWindowEnd',
         'trackDefaults'
     ],
-	methods: [
+    methods: [
         'appendBuffer',
         'appendStream',
         'abort',
         'remove'
     ],
-	events: [
+    events: [
         'abort',
         'error',
         'update',
@@ -59,41 +59,41 @@ export const sourceBufferListType: MediaSourceType = {
     propertys: [
         'length'
     ],
-	events: [
+    events: [
         'addsourcebuffer',
         'removesourcebuffer'
     ]
 }
 
 export default class MSE {
-	private msePlayer: any;
-	private msInstance: any;
-	private activeSourceBuffer: any;
+    private msePlayer: any;
+    private msInstance: any;
+    private activeSourceBuffer: any;
 
-	constructor(msePlayer: any) {
-		this.msePlayer = msePlayer;
-		this.msSourceOpen = this.msSourceOpen.bind(this);
-		this.msSourceClose = this.msSourceClose.bind(this);
-		this.msSourceEnded = this.msSourceEnded.bind(this);
-		this.sbUpdatestart = this.sbUpdatestart.bind(this);
-		this.sbUpdateend = this.sbUpdateend.bind(this);
-		this.sbUpdate = this.sbUpdate.bind(this);
-		this.sbError = this.sbError.bind(this);
-		this.sbAbort = this.sbAbort.bind(this);
-		this.sblAddsourcebuffer = this.sblAddsourcebuffer.bind(this);
-		this.sblRemovesourcebuffer = this.sblRemovesourcebuffer.bind(this);
-		this.asblAddsourcebuffer = this.asblAddsourcebuffer.bind(this);
-		this.asblRemovesourcebuffer = this.asblRemovesourcebuffer.bind(this);
-		this.init();
-	}
+    constructor(msePlayer: any) {
+        this.msePlayer = msePlayer;
+        this.msSourceOpen = this.msSourceOpen.bind(this);
+        this.msSourceClose = this.msSourceClose.bind(this);
+        this.msSourceEnded = this.msSourceEnded.bind(this);
+        this.sbUpdatestart = this.sbUpdatestart.bind(this);
+        this.sbUpdateend = this.sbUpdateend.bind(this);
+        this.sbUpdate = this.sbUpdate.bind(this);
+        this.sbError = this.sbError.bind(this);
+        this.sbAbort = this.sbAbort.bind(this);
+        this.sblAddsourcebuffer = this.sblAddsourcebuffer.bind(this);
+        this.sblRemovesourcebuffer = this.sblRemovesourcebuffer.bind(this);
+        this.asblAddsourcebuffer = this.asblAddsourcebuffer.bind(this);
+        this.asblRemovesourcebuffer = this.asblRemovesourcebuffer.bind(this);
+        this.init();
+    }
 
-	private init() {
-		if (MediaSource.isTypeSupported(this.msePlayer.options.mimeCodec)) {
-			this.msInstance = new MediaSource();
+    private init() {
+        if (MediaSource.isTypeSupported(this.msePlayer.options.mimeCodec)) {
+            this.msInstance = new MediaSource();
             this.msePlayer.videoElement.src = URL.createObjectURL(this.msInstance);
 
-			this.msInstance.addEventListener('sourceopen', this.msSourceOpen);
-			this.msInstance.addEventListener('sourceclose', this.msSourceClose);
+            this.msInstance.addEventListener('sourceopen', this.msSourceOpen);
+            this.msInstance.addEventListener('sourceclose', this.msSourceClose);
             this.msInstance.addEventListener('sourceended', this.msSourceEnded);
             
             this.msInstance.sourceBuffers.addEventListener('addsourcebuffer', this.sblAddsourcebuffer);
@@ -101,14 +101,14 @@ export default class MSE {
 
             this.msInstance.activeSourceBuffers.addEventListener('addsourcebuffer', this.asblAddsourcebuffer);
             this.msInstance.activeSourceBuffers.addEventListener('removesourcebuffer', this.asblRemovesourcebuffer);
-		} else {
-			throw new MseError(
-				`Unsupported MIME type or codec: ${this.msePlayer.options.mimeCodec}`
-			);
-		}
-	}
+        } else {
+            throw new MseError(
+                `Unsupported MIME type or codec: ${this.msePlayer.options.mimeCodec}`
+            );
+        }
+    }
 
-	private msSourceOpen(e: Event) {
+    private msSourceOpen(e: Event) {
         console.log('msSourceOpen');
         this.activeSourceBuffer = this.msInstance.addSourceBuffer(this.msePlayer.options.mimeCodec);
         this.activeSourceBuffer.addEventListener('abort', this.sbAbort);
@@ -117,10 +117,10 @@ export default class MSE {
         this.activeSourceBuffer.addEventListener('updateend', this.sbUpdateend);
         this.activeSourceBuffer.addEventListener('updatestart', this.sbUpdatestart);
 
-		// 一次性加载全部
-		this.fetchUrl(this.msePlayer.options.url).then(response => {
-			this.activeSourceBuffer.appendBuffer(response);
-		});
+        // 一次性加载全部
+        this.fetchUrl(this.msePlayer.options.url).then(response => {
+            this.activeSourceBuffer.appendBuffer(response);
+        });
     }
     
     private msSourceClose(e: Event) {
@@ -169,13 +169,13 @@ export default class MSE {
         console.log('asblRemovesourcebuffer');
     }
 
-	private fetchUrl(url: string) {
+    private fetchUrl(url: string) {
         console.log('fetchUrl: ' + url);
-		return fetch(url)
-			.then(response => response.arrayBuffer())
-			.catch(err => {
-				throw new MseError(err.message);
-			});
+        return fetch(url)
+            .then(response => response.arrayBuffer())
+            .catch(err => {
+                throw new MseError(err.message);
+            });
     }
 
     public destroyASB() {
