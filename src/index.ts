@@ -1,6 +1,6 @@
 import mitt from './mitt';
 import MSE from './mse';
-import MediaElement, { propertys, methods, events } from './mediaElement';
+import MediaElement from './mediaElement';
 import MseError from './mseError';
 import 'whatwg-fetch';
 
@@ -27,7 +27,7 @@ class MsePlayer {
 		if (!this.videoElement || this.videoElement.tagName !== 'VIDEO') {
 			throw new MseError(`Can't find video element: ${this.options.target}`);
 		}
-		this._init();
+		this.init();
 	}
 
 	private static get DEFAULTS(): Options {
@@ -39,10 +39,10 @@ class MsePlayer {
 		};
 	}
 
-	private _init() {
-		this.mse = new MSE(this);
+	private init() {
 		this.mediaElement = new MediaElement(this);
-		console.log(this);
+		this.mse = new MSE(this);
+		// console.log(this);
 	}
 }
 

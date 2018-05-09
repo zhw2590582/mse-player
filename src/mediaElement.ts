@@ -67,18 +67,19 @@ export const events: string[] = [
 
 export default class MediaElement {
 	private msePlayer: any;
+	private events: string[];
 	private videoElement: HTMLVideoElement;
 	[prop: string]: any;
 
 	constructor(msePlayer: any) {
 		this.msePlayer = msePlayer;
 		this.videoElement = msePlayer.videoElement;
-		this._addProperty();
-		this._addMethods();
-		this._addEvents();
+		this.addProperty();
+		this.addMethods();
+		this.addEvents();
 	}
 
-	private _addProperty(): void {
+	private addProperty(): void {
 		for (let index = 0; index < propertys.length; index++) {
 			let property = propertys[index];
 			// @ts-ignore
@@ -86,7 +87,7 @@ export default class MediaElement {
 		}
 	}
 
-	private _addMethods(): void {
+	private addMethods(): void {
 		for (let index = 0; index < methods.length; index++) {
 			let method = methods[index];
 			// @ts-ignore
@@ -94,7 +95,8 @@ export default class MediaElement {
 		}
 	}
 
-	private _addEvents(): void {
+	private addEvents(): void {
+		this.events = events;
 		for (let index = 0; index < events.length; index++) {
 			let event = events[index];
 			this.videoElement.addEventListener(event, (e: Event) => {

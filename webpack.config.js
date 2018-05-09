@@ -3,12 +3,10 @@ const webpack = require('webpack');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const { CheckerPlugin } = require('awesome-typescript-loader');
 const name = 'msePlayer';
-
 let isProd = process.env.NODE_ENV === 'production';
-console.log(isProd)
 
 module.exports = {
-	devtool: isProd ? 'source-map' : 'eval-source-map',
+	devtool: !isProd && '#eval-source-map',
 	entry: {
 		main: './src/index.ts'
 	},
