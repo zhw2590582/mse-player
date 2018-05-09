@@ -1,9 +1,9 @@
 import MseError from './mseError';
 
 interface MediaSourceType {
-	propertys: string[];
-	methods: string[];
-	events: string[];
+	propertys?: string[];
+	methods?: string[];
+	events?: string[];
 }
 
 export const msInstanceType: MediaSourceType = {
@@ -55,6 +55,16 @@ export const sourceBufferType: MediaSourceType = {
     ]
 };
 
+export const sourceBufferListType: MediaSourceType = {
+    propertys: [
+        'length'
+    ],
+	events: [
+        'addsourcebuffer',
+        'removesourcebuffer'
+    ]
+}
+
 export default class MSE {
 	private msePlayer: any;
 	private msInstance: any;
@@ -70,6 +80,10 @@ export default class MSE {
 		this.sbUpdate = this.sbUpdate.bind(this);
 		this.sbError = this.sbError.bind(this);
 		this.sbAbort = this.sbAbort.bind(this);
+		this.sblAddsourcebuffer = this.sblAddsourcebuffer.bind(this);
+		this.sblRemovesourcebuffer = this.sblRemovesourcebuffer.bind(this);
+		this.asblAddsourcebuffer = this.asblAddsourcebuffer.bind(this);
+		this.asblRemovesourcebuffer = this.asblRemovesourcebuffer.bind(this);
 		this.init();
 	}
 
@@ -77,9 +91,16 @@ export default class MSE {
 		if (MediaSource.isTypeSupported(this.msePlayer.options.mimeCodec)) {
 			this.msInstance = new MediaSource();
             this.msePlayer.videoElement.src = URL.createObjectURL(this.msInstance);
+
 			this.msInstance.addEventListener('sourceopen', this.msSourceOpen);
 			this.msInstance.addEventListener('sourceclose', this.msSourceClose);
-			this.msInstance.addEventListener('sourceended', this.msSourceEnded);
+            this.msInstance.addEventListener('sourceended', this.msSourceEnded);
+            
+            this.msInstance.sourceBuffers.addEventListener('addsourcebuffer', this.sblAddsourcebuffer);
+            this.msInstance.sourceBuffers.addEventListener('removesourcebuffer', this.sblRemovesourcebuffer);
+
+            this.msInstance.activeSourceBuffers.addEventListener('addsourcebuffer', this.asblAddsourcebuffer);
+            this.msInstance.activeSourceBuffers.addEventListener('removesourcebuffer', this.asblRemovesourcebuffer);
 		} else {
 			throw new MseError(
 				`Unsupported MIME type or codec: ${this.msePlayer.options.mimeCodec}`
@@ -132,7 +153,24 @@ export default class MSE {
         console.log('sbAbort');
     }
 
+    private sblAddsourcebuffer(e: Event) {
+        console.log('sblAddsourcebuffer');
+    }
+
+    private sblRemovesourcebuffer(e: Event) {
+        console.log('sblRemovesourcebuffer');
+    }
+
+    private asblAddsourcebuffer(e: Event) {
+        console.log('asblAddsourcebuffer');
+    }
+
+    private asblRemovesourcebuffer(e: Event) {
+        console.log('asblRemovesourcebuffer');
+    }
+
 	private fetchUrl(url: string) {
+        console.log('fetchUrl: ' + url);
 		return fetch(url)
 			.then(response => response.arrayBuffer())
 			.catch(err => {
@@ -149,9 +187,22 @@ export default class MSE {
     }
     
     public destroyMS() {
-        URL.revokeObjectURL(this.msePlayer.videoElement.src);
         this.msInstance.removeEventListener('sourceopen', this.msSourceOpen);
         this.msInstance.removeEventListener('sourceclose', this.msSourceClose);
         this.msInstance.removeEventListener('sourceended', this.msSourceEnded);
+    }
+
+    public destroySBL() {
+        this.msInstance.sourceBuffers.removeEventListener('addsourcebuffer', this.sblAddsourcebuffer);
+        this.msInstance.sourceBuffers.removeEventListener('removesourcebuffer', this.sblRemovesourcebuffer);
+    }
+
+    public destroyASBL() {
+        this.msInstance.activeSourceBuffers.removeEventListener('addsourcebuffer', this.asblAddsourcebuffer);
+        this.msInstance.activeSourceBuffers.removeEventListener('removesourcebuffer', this.asblRemovesourcebuffer);
+    }
+
+    public destroyURL(){
+        URL.revokeObjectURL(this.msePlayer.videoElement.src);
     }
 }
