@@ -172,7 +172,10 @@ export default class MSE {
     private fetchUrl(url: string) {
         console.log('fetchUrl: ' + url);
         return fetch(url)
-            .then(response => response.arrayBuffer())
+            .then(response => {
+                console.log(response);
+                return response.arrayBuffer();
+            })
             .catch(err => {
                 throw new MseError(err.message);
             });
