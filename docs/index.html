@@ -33,7 +33,7 @@
 			var eventName = events[index];
 			(function (name) {
 				msePlayer.on(name, event => {
-					console.log(name);
+					console.log('mediaElement: ' + name);
 				});
 			})(eventName)
 		}
