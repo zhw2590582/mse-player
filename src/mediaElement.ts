@@ -1,3 +1,5 @@
+import MseError from './mseError';
+
 export const propertys: string[] = [
 	'audioTracks',
 	'autoplay',

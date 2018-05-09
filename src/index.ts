@@ -1,11 +1,13 @@
 import mitt from './mitt';
 import MSE from './mse';
 import MediaElement, { propertys, methods, events } from './mediaElement';
+import 'whatwg-fetch';
 
 interface Options {
 	target: string;
 	type: string;
 	url: string;
+	mimeCodec: string;
 }
 
 class MsePlayer {
@@ -26,7 +28,8 @@ class MsePlayer {
 		return {
 			target: '',
 			type: '',
-			url: ''
+			url: '',
+			mimeCodec: ''
 		};
 	}
 
