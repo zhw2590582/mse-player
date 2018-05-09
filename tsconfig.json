@@ -1,11 +1,10 @@
 {
-  "compilerOptions": {
-    "target": "es6",
-    "sourceMap": true,
-    "noImplicitAny": true,
-    "removeComments": true
-  },
-  "awesomeTypescriptLoaderOptions": {
-    /* ... */
-  }
+	"compilerOptions": {
+		"target": "es2016",
+		"sourceMap": true,
+		"noImplicitAny": true,
+		"removeComments": true,
+		"moduleResolution": "node"
+	},
+	"exclude": ["node_modules", "dist"]
 }

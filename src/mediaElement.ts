@@ -96,7 +96,7 @@ export default class MediaElement {
 		for (let index = 0; index < events.length; index++) {
 			let event = events[index];
 			this.videoElement.addEventListener(event, (e: Event) => {
-				this.msePlayer.emitter.emit(event, e);
+				this.msePlayer.emit(event, e);
 			});
 		}
 	}

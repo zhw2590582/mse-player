@@ -1,4 +1,4 @@
-import mitt from 'mitt';
+import mitt from './mitt';
 import MSE from './mse';
 import MediaElement, { propertys, methods, events } from './mediaElement';
 
@@ -16,15 +16,9 @@ class MsePlayer {
 	private emitter: any;
 
 	constructor(options: Options) {
-		this.options = {
-			...MsePlayer.DEFAULTS,
-			...options
-		};
-
+		this.options = Object.assign({}, MsePlayer.DEFAULTS, options);
+		Object.assign(this, mitt());
 		this.videoElement = <HTMLVideoElement>document.querySelector(this.options.target);
-
-		// @ts-ignore
-		this.emitter = mitt();
 		this._init();
 	}
 
@@ -39,7 +33,7 @@ class MsePlayer {
 	private _init() {
 		this.mse = new MSE(this);
 		this.mediaElement = new MediaElement(this);
-		// console.log(this);
+		console.log(this);
 	}
 }
 
