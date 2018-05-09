@@ -72,9 +72,9 @@ export default class MSE {
 
     constructor(msePlayer: any) {
         this.msePlayer = msePlayer;
-        this.msSourceOpen = this.msSourceOpen.bind(this);
-        this.msSourceClose = this.msSourceClose.bind(this);
-        this.msSourceEnded = this.msSourceEnded.bind(this);
+        this.msSourceopen = this.msSourceopen.bind(this);
+        this.msSourceclose = this.msSourceclose.bind(this);
+        this.msSourceended = this.msSourceended.bind(this);
         this.sbUpdatestart = this.sbUpdatestart.bind(this);
         this.sbUpdateend = this.sbUpdateend.bind(this);
         this.sbUpdate = this.sbUpdate.bind(this);
@@ -92,9 +92,9 @@ export default class MSE {
             this.msInstance = new MediaSource();
             this.msePlayer.videoElement.src = URL.createObjectURL(this.msInstance);
 
-            this.msInstance.addEventListener('sourceopen', this.msSourceOpen);
-            this.msInstance.addEventListener('sourceclose', this.msSourceClose);
-            this.msInstance.addEventListener('sourceended', this.msSourceEnded);
+            this.msInstance.addEventListener('sourceopen', this.msSourceopen);
+            this.msInstance.addEventListener('sourceclose', this.msSourceclose);
+            this.msInstance.addEventListener('sourceended', this.msSourceended);
             
             this.msInstance.sourceBuffers.addEventListener('addsourcebuffer', this.sblAddsourcebuffer);
             this.msInstance.sourceBuffers.addEventListener('removesourcebuffer', this.sblRemovesourcebuffer);
@@ -108,8 +108,8 @@ export default class MSE {
         }
     }
 
-    private msSourceOpen(e: Event) {
-        console.log('mediaSource: sourceOpen');
+    private msSourceopen(e: Event) {
+        console.log('mediaSource: sourceopen');
         this.activeSourceBuffer = this.msInstance.addSourceBuffer(this.msePlayer.options.mimeCodec);
         this.activeSourceBuffer.addEventListener('abort', this.sbAbort);
         this.activeSourceBuffer.addEventListener('error', this.sbError);
@@ -123,16 +123,16 @@ export default class MSE {
         });
     }
     
-    private msSourceClose(e: Event) {
+    private msSourceclose(e: Event) {
         console.log('mediaSource: sourceClose');
     }
 
-    private msSourceEnded(e: Event) {
+    private msSourceended(e: Event) {
         console.log('mediaSource: sourceEnded');
     }
 
     private sbUpdatestart(e: Event) {
-        console.log('sourceBuffer: updatestart');
+        console.log('sourceBuffer: updateStart');
     }
 
     private sbUpdateend(e: Event) {
@@ -187,9 +187,9 @@ export default class MSE {
     }
     
     public destroyMS() {
-        this.msInstance.removeEventListener('sourceopen', this.msSourceOpen);
-        this.msInstance.removeEventListener('sourceclose', this.msSourceClose);
-        this.msInstance.removeEventListener('sourceended', this.msSourceEnded);
+        this.msInstance.removeEventListener('sourceopen', this.msSourceopen);
+        this.msInstance.removeEventListener('sourceclose', this.msSourceclose);
+        this.msInstance.removeEventListener('sourceended', this.msSourceended);
     }
 
     public destroySBL() {
