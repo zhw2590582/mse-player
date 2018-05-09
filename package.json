@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "基于MSE实现的视频播放器研究",
   "scripts": {
-    "dev": "webpack-dev-server --mode development --open --inline --content-base docs/",
-    "build": "webpack --mode production",
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --mode development --open --inline --content-base docs/",
+    "build": "cross-env NODE_ENV=production  webpack --mode production",
     "test": "jest"
   },
   "repository": {
@@ -23,6 +23,7 @@
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",
     "babel-preset-env": "^1.6.1",
+    "cross-env": "^5.1.4",
     "jest": "^22.4.2",
     "typescript": "^2.8.3",
     "uglifyjs-webpack-plugin": "^1.2.5",
