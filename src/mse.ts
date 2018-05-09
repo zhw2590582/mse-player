@@ -124,15 +124,15 @@ export default class MSE {
     }
     
     private msSourceclose(e: Event) {
-        console.log('mediaSource: sourceClose');
+        console.log('mediaSource: sourceclose');
     }
 
     private msSourceended(e: Event) {
-        console.log('mediaSource: sourceEnded');
+        console.log('mediaSource: sourceended');
     }
 
     private sbUpdatestart(e: Event) {
-        console.log('sourceBuffer: updateStart');
+        console.log('sourceBuffer: updatestart');
     }
 
     private sbUpdateend(e: Event) {
