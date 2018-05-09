@@ -109,7 +109,7 @@ export default class MSE {
     }
 
     private msSourceOpen(e: Event) {
-        console.log('msSourceOpen');
+        console.log('mediaSource: sourceOpen');
         this.activeSourceBuffer = this.msInstance.addSourceBuffer(this.msePlayer.options.mimeCodec);
         this.activeSourceBuffer.addEventListener('abort', this.sbAbort);
         this.activeSourceBuffer.addEventListener('error', this.sbError);
@@ -124,53 +124,53 @@ export default class MSE {
     }
     
     private msSourceClose(e: Event) {
-        console.log('msSourceClose');
+        console.log('mediaSource: sourceClose');
     }
 
     private msSourceEnded(e: Event) {
-        console.log('msSourceEnded');
+        console.log('mediaSource: sourceEnded');
     }
 
     private sbUpdatestart(e: Event) {
-        console.log('sbUpdatestart');
+        console.log('sourceBuffer: updatestart');
     }
 
     private sbUpdateend(e: Event) {
-        console.log('sbUpdateend');
+        console.log('sourceBuffer: updateend');
         this.msInstance.endOfStream();
         this.msePlayer.videoElement.play();
     }
 
     private sbUpdate(e: Event) {
-        console.log('sbUpdate');
+        console.log('sourceBuffer: update');
     }
 
     private sbError(e: Event) {
-        console.log('sbError');
+        console.log('sourceBuffer: error');
     }
 
     private sbAbort(e: Event) {
-        console.log('sbAbort');
+        console.log('sourceBuffer: abort');
     }
 
     private sblAddsourcebuffer(e: Event) {
-        console.log('sblAddsourcebuffer');
+        console.log('sourceBufferList: addsourcebuffer');
     }
 
     private sblRemovesourcebuffer(e: Event) {
-        console.log('sblRemovesourcebuffer');
+        console.log('sourceBufferList: removesourcebuffer');
     }
 
     private asblAddsourcebuffer(e: Event) {
-        console.log('asblAddsourcebuffer');
+        console.log('activeSourceBufferList: addsourcebuffer');
     }
 
     private asblRemovesourcebuffer(e: Event) {
-        console.log('asblRemovesourcebuffer');
+        console.log('activeSourceBufferList: removesourcebuffer');
     }
 
     private fetchUrl(url: string) {
-        console.log('fetchUrl: ' + url);
+        console.log('fetch: ' + url);
         return fetch(url)
             .then(response => response.arrayBuffer())
             .catch(err => {
