@@ -17,7 +17,6 @@ class MsePlayer {
 	private videoElement: HTMLVideoElement;
 	private mediaElement: any;
 	private mse: any;
-	private emitter: any;
 
 	constructor(options: Options) {
 		this.options = this.verification(
@@ -48,7 +47,7 @@ class MsePlayer {
 		}
 
 		if (!options.type) {
-			let urlArr = options.url.split('.');
+			let urlArr = options.url.trim().split('.');
 			let type = urlArr[urlArr.length - 1];
 			if (!type) {
 				throw new MseError(`Can't find video's type from ${options.url}`);
