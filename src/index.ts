@@ -1,6 +1,7 @@
 import mitt from './mitt';
 import MSE from './mse';
 import MediaElement, { propertys, methods, events } from './mediaElement';
+import MseError from './mseError';
 import 'whatwg-fetch';
 
 interface Options {
@@ -19,8 +20,13 @@ class MsePlayer {
 
 	constructor(options: Options) {
 		this.options = Object.assign({}, MsePlayer.DEFAULTS, options);
-		Object.assign(this, mitt());
-		this.videoElement = <HTMLVideoElement>document.querySelector(this.options.target);
+		Object.assign(this.constructor.prototype, mitt());
+		this.videoElement = <HTMLVideoElement>document.querySelector(
+			this.options.target
+		);
+		if (!this.videoElement || this.videoElement.tagName !== 'VIDEO') {
+			throw new MseError(`Can't find video element: ${this.options.target}`);
+		}
 		this._init();
 	}
 
