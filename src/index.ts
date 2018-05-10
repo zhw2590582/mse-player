@@ -39,7 +39,7 @@ class MsePlayer {
             type: '',
             url: '',
             mimeCodec: '',
-            segmentLength: null
+            segmentLength: 1048576
         };
     }
 

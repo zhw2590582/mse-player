@@ -70,6 +70,8 @@ export default class MSE {
     private msInstance: any;
     private activeSourceBuffer: any;
     private contentLength: number;
+    private totalSegments: number;
+    private segmentIndex: number;
 
     constructor(msePlayer: any) {
         this.msePlayer = msePlayer;
@@ -85,6 +87,8 @@ export default class MSE {
         this.sblRemovesourcebuffer = this.sblRemovesourcebuffer.bind(this);
         this.asblAddsourcebuffer = this.asblAddsourcebuffer.bind(this);
         this.asblRemovesourcebuffer = this.asblRemovesourcebuffer.bind(this);
+        this.videoTimeupdate = this.videoTimeupdate.bind(this);
+        this.videoCanplay = this.videoCanplay.bind(this);
         this.init();
     }
 
@@ -92,14 +96,11 @@ export default class MSE {
         if (MediaSource.isTypeSupported(this.msePlayer.options.mimeCodec)) {
             this.msInstance = new MediaSource();
             this.msePlayer.videoElement.src = URL.createObjectURL(this.msInstance);
-
             this.msInstance.addEventListener('sourceopen', this.msSourceopen);
             this.msInstance.addEventListener('sourceclose', this.msSourceclose);
             this.msInstance.addEventListener('sourceended', this.msSourceended);
-            
             this.msInstance.sourceBuffers.addEventListener('addsourcebuffer', this.sblAddsourcebuffer);
             this.msInstance.sourceBuffers.addEventListener('removesourcebuffer', this.sblRemovesourcebuffer);
-
             this.msInstance.activeSourceBuffers.addEventListener('addsourcebuffer', this.asblAddsourcebuffer);
             this.msInstance.activeSourceBuffers.addEventListener('removesourcebuffer', this.asblRemovesourcebuffer);
         } else {
@@ -115,23 +116,57 @@ export default class MSE {
         this.activeSourceBuffer.addEventListener('abort', this.sbAbort);
         this.activeSourceBuffer.addEventListener('error', this.sbError);
         this.activeSourceBuffer.addEventListener('update', this.sbUpdate);
-        this.activeSourceBuffer.addEventListener('updateend', this.sbUpdateend);
         this.activeSourceBuffer.addEventListener('updatestart', this.sbUpdatestart);
-
-        // 一次性加载全部
-        this.appendAll();
-
-        // 分段加载
+        this.appendSegment();
     }
 
-    private appendAll() {
-        this.fetchUrl(this.msePlayer.options.url).then(response => {
-            this.activeSourceBuffer.appendBuffer(response);
+    private appendSegment() {
+        this.getContentLength(this.msePlayer.options.url).then(contentLength => {
+            let segmentLength = this.msePlayer.options.segmentLength;
+            this.contentLength = contentLength;
+            this.totalSegments = Math.ceil(this.contentLength / segmentLength);
+            this.segmentIndex = 0;
+            console.log('fileLength: ' + this.contentLength);
+            console.log('totalSegments: ' + this.totalSegments);
+            this.fetchUrl(this.msePlayer.options.url, 0, segmentLength).then(response => {
+                ++this.segmentIndex;
+                this.activeSourceBuffer.appendBuffer(response);
+            });
+            this.msePlayer.videoElement.addEventListener('timeupdate', this.videoTimeupdate);
+            this.msePlayer.videoElement.addEventListener('canplay', this.videoCanplay);
         });
     }
 
-    private appendSegment(chunk: any) {
-        // 
+    private videoTimeupdate(e: Event) {
+        let segmentLength = this.msePlayer.options.segmentLength;
+        let videoCurrentTime = this.msePlayer.videoElement.currentTime;
+        let videoDuration = this.msePlayer.videoElement.duration;
+        let segmentDuration = videoDuration / this.totalSegments;
+        if (videoCurrentTime >= (this.segmentIndex * segmentDuration) * 0.8) {
+            if (this.segmentIndex === this.totalSegments - 1){
+                this.fetchUrl(
+                    this.msePlayer.options.url,
+                    this.segmentIndex * segmentLength + 1,
+                    this.contentLength
+                ).then(response => {
+                   this.activeSourceBuffer.appendBuffer(response);
+                   this.activeSourceBuffer.addEventListener('updateend', this.sbUpdateend);
+                });
+                this.msePlayer.videoElement.removeEventListener('timeupdate', this.videoTimeupdate);
+            } else {
+                this.fetchUrl(
+                    this.msePlayer.options.url,
+                    this.segmentIndex * segmentLength + 1,
+                    ++this.segmentIndex * segmentLength
+                ).then(response => {
+                    this.activeSourceBuffer.appendBuffer(response);
+                });
+            }
+        }
+    }
+
+    private videoCanplay(e: Event) {
+        this.msePlayer.videoElement.play();
     }
     
     private msSourceclose(e: Event) {
@@ -149,7 +184,6 @@ export default class MSE {
     private sbUpdateend(e: Event) {
         console.log('sourceBuffer: updateend');
         this.msInstance.endOfStream();
-        this.msePlayer.videoElement.play();
     }
 
     private sbUpdate(e: Event) {
@@ -180,16 +214,23 @@ export default class MSE {
         console.log('activeSourceBufferList: removesourcebuffer');
     }
 
-    private fetchUrl(url: string) {
-        console.log('fetch: ' + url);
-        return fetch(url)
-            .then(response => {
-                if (!this.contentLength) {
-                    this.contentLength = Number(response.headers.get('content-length'));
-                    console.log('content-length: ' + this.contentLength);
+    private fetchUrl(url: string, start: number, end: number) {
+        console.log('fetch: ' + start + '-' + end);
+        return fetch(url, {
+                headers: {
+                    Range: `bytes=${start}-${end}`
                 }
-                return response.arrayBuffer();
             })
+            .then(response => response.arrayBuffer())
+            .catch(err => {
+                throw new MseError(err.message);
+            });
+    }
+
+    private getContentLength(url: string) {
+        console.log('getContentLength: ' + url);
+        return fetch(url)
+            .then(response => Number(response.headers.get('content-length')))
             .catch(err => {
                 throw new MseError(err.message);
             });
