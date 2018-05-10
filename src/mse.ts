@@ -146,14 +146,14 @@ export default class MSE {
         let videoDuration = this.msePlayer.videoElement.duration;
         let segmentDuration = videoDuration / this.totalSegments;
         if (videoCurrentTime >= segmentDuration * (this.segmentIndex - 1) + segmentDuration * 0.8) {
-            if (this.segmentIndex === this.totalSegments - 1){
+            if (this.segmentIndex === this.totalSegments - 1) {
                 this.fetchUrl(
                     this.msePlayer.options.url,
                     this.segmentIndex * segmentLength + 1,
                     this.contentLength
                 ).then(response => {
-                   this.activeSourceBuffer.appendBuffer(response);
-                   this.activeSourceBuffer.addEventListener('updateend', this.sbUpdateend);
+                    this.activeSourceBuffer.appendBuffer(response);
+                    this.activeSourceBuffer.addEventListener('updateend', this.sbUpdateend);
                 });
                 this.msePlayer.videoElement.removeEventListener('timeupdate', this.videoTimeupdate);
             } else {
