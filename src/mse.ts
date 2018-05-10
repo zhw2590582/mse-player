@@ -122,11 +122,14 @@ export default class MSE {
 
     private appendSegment() {
         this.getContentLength(this.msePlayer.options.url).then(contentLength => {
+            if (!contentLength) {
+                throw new MseError(`Can't get video's Content-Length`);
+            }
             let segmentLength = this.msePlayer.options.segmentLength;
             this.contentLength = contentLength;
             this.totalSegments = Math.ceil(this.contentLength / segmentLength);
             this.segmentIndex = 0;
-            console.log('fileLength: ' + this.contentLength);
+            console.log('contentLength: ' + this.contentLength);
             console.log('totalSegments: ' + this.totalSegments);
             this.fetchUrl(this.msePlayer.options.url, 0, segmentLength).then(response => {
                 ++this.segmentIndex;
