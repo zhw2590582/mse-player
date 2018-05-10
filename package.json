@@ -1,7 +1,7 @@
 {
   "name": "mse-player",
   "version": "1.0.0",
-  "description": "基于MSE实现的视频播放器研究",
+  "description": "基于MSE实现的视频分段加载播放器",
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --mode development --open --inline --content-base docs/",
     "build": "cross-env NODE_ENV=production  webpack --mode production",
