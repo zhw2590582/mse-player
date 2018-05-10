@@ -145,7 +145,7 @@ export default class MSE {
         let videoCurrentTime = this.msePlayer.videoElement.currentTime;
         let videoDuration = this.msePlayer.videoElement.duration;
         let segmentDuration = videoDuration / this.totalSegments;
-        if (videoCurrentTime >= (this.segmentIndex * segmentDuration) * 0.8) {
+        if (videoCurrentTime >= segmentDuration * (this.segmentIndex - 1) + segmentDuration * 0.8) {
             if (this.segmentIndex === this.totalSegments - 1){
                 this.fetchUrl(
                     this.msePlayer.options.url,
