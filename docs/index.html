@@ -24,7 +24,8 @@
 	<script>
 		var msePlayer = new MsePlayer({
 			target: "#video",
-			url: 'https://raw.githubusercontent.com/zhw2590582/mse-player/master/docs/video/frag_bunny.mp4'
+			url: window.location.href + 'video/frag_bunny.mp4',
+			segmentLength: 1048576
 		});
 
 		// 监听所有事件

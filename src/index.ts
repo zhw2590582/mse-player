@@ -10,6 +10,7 @@ interface Options {
     url: string;
     type?: string;
     mimeCodec?: string;
+    segmentLength?: number;
 }
 
 class MsePlayer {
@@ -37,7 +38,8 @@ class MsePlayer {
             target: '',
             type: '',
             url: '',
-            mimeCodec: ''
+            mimeCodec: '',
+            segmentLength: null
         };
     }
 

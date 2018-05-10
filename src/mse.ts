@@ -69,6 +69,7 @@ export default class MSE {
     private msePlayer: any;
     private msInstance: any;
     private activeSourceBuffer: any;
+    private contentLength: number;
 
     constructor(msePlayer: any) {
         this.msePlayer = msePlayer;
@@ -118,9 +119,19 @@ export default class MSE {
         this.activeSourceBuffer.addEventListener('updatestart', this.sbUpdatestart);
 
         // 一次性加载全部
+        this.appendAll();
+
+        // 分段加载
+    }
+
+    private appendAll() {
         this.fetchUrl(this.msePlayer.options.url).then(response => {
             this.activeSourceBuffer.appendBuffer(response);
         });
+    }
+
+    private appendSegment(chunk: any) {
+        // 
     }
     
     private msSourceclose(e: Event) {
@@ -172,7 +183,13 @@ export default class MSE {
     private fetchUrl(url: string) {
         console.log('fetch: ' + url);
         return fetch(url)
-            .then(response => response.arrayBuffer())
+            .then(response => {
+                if (!this.contentLength) {
+                    this.contentLength = Number(response.headers.get('content-length'));
+                    console.log('content-length: ' + this.contentLength);
+                }
+                return response.arrayBuffer();
+            })
             .catch(err => {
                 throw new MseError(err.message);
             });
